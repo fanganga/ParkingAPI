@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 namespace ParkingAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class ParkingController : ControllerBase
     {
         private readonly ILogger<ParkingController> _logger;
@@ -20,13 +19,15 @@ namespace ParkingAPI.Controllers
         }
 
         [HttpGet]
-        public ParkingStatus Get()
+        [Route("parking")]
+        public ParkingStatus Index()
         {
             return new ParkingStatus() { AvailableSpaces = _repo.CountFreeSpaces(), OccupiedSpaces = _repo.CountOccupiedSpaces() };
         }
 
         [HttpPost]
-        public ActionResult<EntryResponse> Post(EntryRequest request)
+        [Route("parking")]
+        public ActionResult<EntryResponse> Index(EntryRequest request)
         {
             if( !Enum.IsDefined(typeof(CarSize), request.VehicleType)){
                 return BadRequest("Invalid vehicle type - must be 1, 2 or 3");
@@ -63,8 +64,35 @@ namespace ParkingAPI.Controllers
                     
                 };
                 return new ActionResult<EntryResponse>(response);
+            }            
+        }
+
+        [HttpPost]
+        [Route("parking/exit")]
+        public ActionResult<ExitResponse> Exit(ExitRequest request)
+        {
+            if (String.IsNullOrEmpty(request.VehicleReg))
+            {
+                return BadRequest("Must supply VehicleReg");
             }
-            
+            SpaceOccupancy? currentOccupancy = _repo.GetCurrentOccupancyForReg(request.VehicleReg);
+
+            if(currentOccupancy == null)
+            {
+                return BadRequest("No vehicle with the supplied registration is recorded in the car park");
+            }
+
+            currentOccupancy.TimeOut = DateTime.UtcNow;
+            _repo.FreeSpace(currentOccupancy.SpaceNumber);
+
+            ExitResponse response = new ExitResponse()
+            {
+                VehicleReg = currentOccupancy.OccupierReg,
+                VehicleCharge = 0.0,
+                TimeIn = currentOccupancy.TimeIn,
+                TimeOut = currentOccupancy.TimeOut
+            };
+            return new ActionResult<ExitResponse>(response);
         }
     }
 }

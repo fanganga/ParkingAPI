@@ -22,15 +22,19 @@ An in-memory database is used, which is seeded on startup.
 - [x] Post /parking updates DB, putting specified vehicle in first avaiable space
 - [x] Post /parking returns {VehicleReg: string, SpaceNumber: int, TimeIn: DateTime}
 - [x] Post /parking returns error for invalid type, reg already recorded
-- [ ] Post /parking/exit updates DB
-- [ ] Post /parking/exit returns error if reg does not represent parked vehicle
-- [ ] Post /parking/exit returns {VehicleReg: string, VehicleCharge: double TimeIn: DateTime, TimeOut: DateTime}
+- [x] Post /parking/exit updates DB
+- [x] Post /parking/exit returns error if reg does not represent parked vehicle
+- [x] Post /parking/exit returns {VehicleReg: string, VehicleCharge: double TimeIn: DateTime, TimeOut: DateTime}
+- [ ] Vehicle charge calculated appropriately
 
 ### Stretch goals
 
 - [ ] Integrate swagger
-- [ ] Replace in-memory DB with MSSQL
+- [ ] Fix compiler warnings/notices
+- [ ] Extend unit tests to cover behaviour currently in controllers
 - [ ] Make number of spaces configurable
+- [ ] Replace in-memory DB with MSSQL
+
 
 ### Possible scope increases for future
 
