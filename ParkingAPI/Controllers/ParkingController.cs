@@ -14,12 +14,14 @@ namespace ParkingAPI.Controllers
         private readonly ILogger<ParkingController> _logger;
         private readonly IParkingRepo _repo;
         private readonly IFeeCalculator _calculator;
+        private readonly ICarEntryService _carEntryService;
 
-        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, IFeeCalculator calculator)
+        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, IFeeCalculator calculator, ICarEntryService carEntryService)
         {
             _logger = logger;
             _repo = repo;
             _calculator = calculator;
+            _carEntryService = carEntryService;
         }
 
         [HttpGet]
@@ -50,22 +52,7 @@ namespace ParkingAPI.Controllers
             {
                 return Problem("No free spaces");
             } else {
-                CarEntered entry = new ()
-                {
-                    TimeIn = DateTime.UtcNow,
-                    CarSize = (CarSize)request.VehicleType,
-                    RegistrationNumber = request.VehicleReg,
-                    SpaceNumber = (int)firstFreeSpace
-                };
-                _repo.RecordCarEntry(entry);
-
-                EntryResponse response = new ()
-                {
-                    VehicleReg = request.VehicleReg,
-                    SpaceNumber = entry.SpaceNumber,
-                    TimeIn = entry.TimeIn,
-                    
-                };
+                EntryResponse response = _carEntryService.ParkCar(request, firstFreeSpace.Value);
                 return new ActionResult<EntryResponse>(response);
             }            
         }

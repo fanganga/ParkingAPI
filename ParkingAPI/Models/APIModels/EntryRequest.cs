@@ -10,7 +10,7 @@ namespace ParkingAPI.Models.APIModels
 
         public ModelStateDictionary Validate()
         {
-            ModelStateDictionary validationResult = new ModelStateDictionary();
+            ModelStateDictionary validationResult = new ();
             if (!Enum.IsDefined(typeof(CarSize), this.VehicleType))
             {
                 validationResult.AddModelError("VehicleType", "Invalid vehicle type - must be 1, 2 or 3");

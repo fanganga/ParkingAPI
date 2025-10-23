@@ -21,8 +21,11 @@ namespace ParkingApi.Test
 
             var validationResult = request.Validate();
 
-            Assert.That(validationResult.IsValid, Is.True);
-            Assert.That(validationResult.ErrorCount, Is.EqualTo(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationResult.IsValid, Is.True);
+                Assert.That(validationResult.ErrorCount, Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -36,9 +39,12 @@ namespace ParkingApi.Test
 
             var validationResult = request.Validate();
 
-            Assert.That(validationResult.IsValid, Is.False);
-            Assert.That(validationResult.ErrorCount, Is.EqualTo(1));
-            Assert.That(validationResult.Keys.ElementAt(0), Is.EqualTo("VehicleReg"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationResult.IsValid, Is.False);
+                Assert.That(validationResult.ErrorCount, Is.EqualTo(1));
+                Assert.That(validationResult.Keys.ElementAt(0), Is.EqualTo("VehicleReg"));
+            });
         }
 
         [Test]
@@ -52,9 +58,12 @@ namespace ParkingApi.Test
 
             var validationResult = request.Validate();
 
-            Assert.That(validationResult.IsValid, Is.False);
-            Assert.That(validationResult.ErrorCount, Is.EqualTo(1));
-            Assert.That(validationResult.Keys.ElementAt(0), Is.EqualTo("VehicleType"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationResult.IsValid, Is.False);
+                Assert.That(validationResult.ErrorCount, Is.EqualTo(1));
+                Assert.That(validationResult.Keys.ElementAt(0), Is.EqualTo("VehicleType"));
+            });
         }
 
         [Test]
@@ -68,8 +77,11 @@ namespace ParkingApi.Test
 
             var validationResult = request.Validate();
 
-            Assert.That(validationResult.IsValid, Is.False);
-            Assert.That(validationResult.ErrorCount, Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(validationResult.IsValid, Is.False);
+                Assert.That(validationResult.ErrorCount, Is.EqualTo(2));
+            });
         }
     }
 }
