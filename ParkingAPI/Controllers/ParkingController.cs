@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ParkingAPI.Models.APIModels;
 using ParkingAPI.Models.InternalModels;
 using ParkingAPI.Repos;
@@ -32,13 +33,12 @@ namespace ParkingAPI.Controllers
         [Route("parking")]
         public ActionResult<EntryResponse> Index(EntryRequest request)
         {
-            if( !Enum.IsDefined(typeof(CarSize), request.VehicleType)){
-                return BadRequest("Invalid vehicle type - must be 1, 2 or 3");
-            }
-            if(String.IsNullOrEmpty(request.VehicleReg))
+            ModelStateDictionary validationResult = request.Validate();
+            if(validationResult.ErrorCount > 0)
             {
-                return BadRequest("Must supply VehicleReg");
+                return BadRequest(validationResult);
             }
+
             if(_repo.GetCurrentOccupancyForReg(request.VehicleReg) != null)
             {
                 return BadRequest("Attempting to record arrival of vehicle registration already in car park");

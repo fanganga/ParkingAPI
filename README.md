@@ -1,11 +1,11 @@
 # Parking API readme
 
 ## Setup Instructions
-Set the value of "CarParkSize" in appsettings.json to the desired number of spaces
-Compile and run the application either through Visual Studio or dotnet CLI.
-The API is available on https://localhost:7295
-API documentation is available on https://localhost:7295/swagger
-An in-memory database is used, which is seeded on startup.
+1. Set the value of "CarParkSize" in appsettings.json to the desired number of spaces
+2. Compile and run the application either through Visual Studio or dotnet CLI.
+3. The API is available on https://localhost:7295
+4. API documentation is available on https://localhost:7295/swagger
+5. An in-memory database is used, which is seeded on startup.
 
 ## Assumptions & Questions
 - All parking spaces are intercahngable (although the model considers Small, Medium and Large cars, there is not a need for Small, Medium and Large spaces)
@@ -13,7 +13,7 @@ An in-memory database is used, which is seeded on startup.
 - There is no need to consider spaces being unavailable for reasons other than being occupied (eg being resurfaced)
 - Given the time constraints and the instruction to avoid over-engineering, I chose to have the database represent a real time snapshot of the car park, having the database hold a history of use for eg analytics, sending regular users a monthly bill seems like a likely requirement. How that can be achieved is discussed in Possible scope Increases for Future
 - There is only one client in the system, and therefore no need for locking or transactions
-- The expected return values for error statuses has not been specified - I have used BadRequest where the supplied data is invalid, including for a registration already used, and Problem where there are no free spaces
+- The expected return values for error statuses have not been specified - I have used BadRequest where the supplied data is invalid, including for a registration already used, and Problem where there are no free spaces
 
 ## ToDo
 
