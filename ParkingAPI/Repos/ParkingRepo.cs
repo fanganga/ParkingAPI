@@ -7,7 +7,7 @@ namespace ParkingAPI.Repos
 {
     public class ParkingRepo : IParkingRepo
     {
-        ParkingDataContext _context;
+        private readonly ParkingDataContext _context;
         public ParkingRepo(ParkingDataContext context) {
             _context = context;
         }
@@ -39,7 +39,7 @@ namespace ParkingAPI.Repos
         public SpaceOccupancy? GetCurrentOccupancyForReg(string reg)
         {
             return _context.Spaces.Where(space => space.OccupierReg ==  reg)
-                .Select(s => new SpaceOccupancy() { OccupierReg = reg, OccupierSize = (CarSize) s.OccupierType, TimeIn = s.OccupierTimeIn, SpaceNumber = s.Id} ).FirstOrDefault();
+                .Select(s => new SpaceOccupancy() { OccupierReg = reg, OccupierSize = (CarSize) s.OccupierType.Value, TimeIn = s.OccupierTimeIn, SpaceNumber = s.Id} ).FirstOrDefault();
         }
 
         public void FreeSpace(int spaceNumber)

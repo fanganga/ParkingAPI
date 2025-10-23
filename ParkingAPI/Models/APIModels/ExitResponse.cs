@@ -2,7 +2,7 @@
 {
     public class ExitResponse
     {
-        public string VehicleReg { get; set; }
+        public string? VehicleReg { get; set; }
         public double VehicleCharge { get; set; }
         public DateTime? TimeIn { get; set; }
 

@@ -32,7 +32,7 @@ An in-memory database is used, which is seeded on startup.
 ### Stretch goals
 
 - [x] Integrate swagger
-- [ ] Fix compiler warnings/notices
+- [x] Fix compiler warnings/notices
 - [ ] Extend unit tests to cover behaviour currently in controllers
 - [x] Make number of spaces configurable
 - [ ] Replace in-memory DB with MSSQL

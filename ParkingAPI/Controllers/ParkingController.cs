@@ -11,8 +11,8 @@ namespace ParkingAPI.Controllers
     public class ParkingController : ControllerBase
     {
         private readonly ILogger<ParkingController> _logger;
-        private IParkingRepo _repo;
-        private IFeeCalculator _calculator;
+        private readonly IParkingRepo _repo;
+        private readonly IFeeCalculator _calculator;
 
         public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, IFeeCalculator calculator)
         {
@@ -50,7 +50,7 @@ namespace ParkingAPI.Controllers
             {
                 return Problem("No free spaces");
             } else {
-                CarEntered entry = new CarEntered()
+                CarEntered entry = new ()
                 {
                     TimeIn = DateTime.UtcNow,
                     CarSize = (CarSize)request.VehicleType,
@@ -59,7 +59,7 @@ namespace ParkingAPI.Controllers
                 };
                 _repo.RecordCarEntry(entry);
 
-                EntryResponse response = new EntryResponse()
+                EntryResponse response = new ()
                 {
                     VehicleReg = request.VehicleReg,
                     SpaceNumber = entry.SpaceNumber,
@@ -88,7 +88,7 @@ namespace ParkingAPI.Controllers
             currentOccupancy.TimeOut = DateTime.UtcNow;
             _repo.FreeSpace(currentOccupancy.SpaceNumber);
 
-            ExitResponse response = new ExitResponse()
+            ExitResponse response = new ()
             {
                 VehicleReg = currentOccupancy.OccupierReg,
                 VehicleCharge = _calculator.CalculateFee(currentOccupancy),
