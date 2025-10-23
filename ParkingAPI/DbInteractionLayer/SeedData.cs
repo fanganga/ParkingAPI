@@ -14,7 +14,11 @@ namespace ParkingAPI.DbInteractionLayer
                 var context = new ParkingDataContext(serviceProvider.GetRequiredService<DbContextOptions<ParkingDataContext>>())
             )
             {
-                int numberOfSpaces = 50;
+                int numberOfSpaces ;
+                if (Int32.TryParse(serviceProvider.GetRequiredService<IConfiguration>()["carParkSize"], out numberOfSpaces) == false)
+                {
+                    numberOfSpaces = 50;
+                };
                 if (context.Spaces.FirstOrDefault() == null)
                 {
                     for (int i = 1; i <= numberOfSpaces; i++)

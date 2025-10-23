@@ -1,8 +1,10 @@
 # Parking API readme
 
 ## Setup Instructions
+Set the value of "CarParkSize" in appsettings.json to the desired number of spaces
 Compile and run the application either through Visual Studio or dotnet CLI.
 The API is available on https://localhost:7295
+API documentation is available on https://localhost:7295/swagger
 An in-memory database is used, which is seeded on startup.
 
 ## Assumptions & Questions
@@ -32,7 +34,7 @@ An in-memory database is used, which is seeded on startup.
 - [x] Integrate swagger
 - [ ] Fix compiler warnings/notices
 - [ ] Extend unit tests to cover behaviour currently in controllers
-- [ ] Make number of spaces configurable
+- [x] Make number of spaces configurable
 - [ ] Replace in-memory DB with MSSQL
 
 
