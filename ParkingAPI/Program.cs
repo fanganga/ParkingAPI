@@ -16,8 +16,17 @@ builder.Services.AddScoped<IParkingRepo, ParkingRepo>();
 builder.Services.AddSingleton<IFeeCalculator, FeeCalculator>();
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 using (var scope = app.Services.CreateScope())
 {
