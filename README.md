@@ -25,7 +25,7 @@ An in-memory database is used, which is seeded on startup.
 - [x] Post /parking/exit updates DB
 - [x] Post /parking/exit returns error if reg does not represent parked vehicle
 - [x] Post /parking/exit returns {VehicleReg: string, VehicleCharge: double TimeIn: DateTime, TimeOut: DateTime}
-- [ ] Vehicle charge calculated appropriately
+- [x] Vehicle charge calculated appropriately
 
 ### Stretch goals
 

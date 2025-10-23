@@ -3,6 +3,7 @@ using ParkingAPI.DataContexts;
 using ParkingAPI.DbInteractionLayer;
 using ParkingAPI.Models.DataModels;
 using ParkingAPI.Repos;
+using ParkingAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<ParkingDataContext>(opt => opt
 );
 
 builder.Services.AddScoped<IParkingRepo, ParkingRepo>();
+builder.Services.AddSingleton<IFeeCalculator, FeeCalculator>();
 builder.Services.AddControllers();
 
 

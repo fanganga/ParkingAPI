@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingAPI.Models.APIModels;
 using ParkingAPI.Models.InternalModels;
 using ParkingAPI.Repos;
+using ParkingAPI.Services;
 using System.Text.Json.Serialization;
 
 namespace ParkingAPI.Controllers
@@ -11,11 +12,13 @@ namespace ParkingAPI.Controllers
     {
         private readonly ILogger<ParkingController> _logger;
         private IParkingRepo _repo;
+        private IFeeCalculator _calculator;
 
-        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo)
+        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, IFeeCalculator calculator)
         {
             _logger = logger;
             _repo = repo;
+            _calculator = calculator;
         }
 
         [HttpGet]
@@ -88,7 +91,7 @@ namespace ParkingAPI.Controllers
             ExitResponse response = new ExitResponse()
             {
                 VehicleReg = currentOccupancy.OccupierReg,
-                VehicleCharge = 0.0,
+                VehicleCharge = _calculator.CalculateFee(currentOccupancy),
                 TimeIn = currentOccupancy.TimeIn,
                 TimeOut = currentOccupancy.TimeOut
             };
