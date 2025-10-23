@@ -49,3 +49,7 @@ It may be necessary to account for the relationship between registration number 
 
 Occupied spaces can be represented by those ParkingOccupancies where OccupierOut is null
 Free spaces can be represented by obtaining a Left join of the parking spaces table and the occupied spaces selection, then selecting those records from the join result where OccupierReg has no value.
+
+The Fee Structure could be moved to the database to enable fee changes. A proposed set of tables are:
+- BaseFees with columns DateTime: ValidFrom, Int: VehicleType, Double: FeePerIncrement, Int: IncrementMinutes
+- LongStayFees with columns DateTime: ValidFrom, Double: FeePerIncrement, Int: IncrementMinutes

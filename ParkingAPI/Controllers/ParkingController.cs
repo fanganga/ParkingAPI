@@ -13,14 +13,14 @@ namespace ParkingAPI.Controllers
     {
         private readonly ILogger<ParkingController> _logger;
         private readonly IParkingRepo _repo;
-        private readonly IFeeCalculator _calculator;
+        private readonly ICarExitService _carExitService;
         private readonly ICarEntryService _carEntryService;
 
-        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, IFeeCalculator calculator, ICarEntryService carEntryService)
+        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, ICarExitService carExitService, ICarEntryService carEntryService)
         {
             _logger = logger;
             _repo = repo;
-            _calculator = calculator;
+            _carExitService = carExitService;
             _carEntryService = carEntryService;
         }
 
@@ -72,16 +72,7 @@ namespace ParkingAPI.Controllers
                 return BadRequest("No vehicle with the supplied registration is recorded in the car park");
             }
 
-            currentOccupancy.TimeOut = DateTime.UtcNow;
-            _repo.FreeSpace(currentOccupancy.SpaceNumber);
-
-            ExitResponse response = new ()
-            {
-                VehicleReg = currentOccupancy.OccupierReg,
-                VehicleCharge = _calculator.CalculateFee(currentOccupancy),
-                TimeIn = currentOccupancy.TimeIn,
-                TimeOut = currentOccupancy.TimeOut
-            };
+            ExitResponse response = _carExitService.CheckOutCar(currentOccupancy);
             return new ActionResult<ExitResponse>(response);
         }
     }
