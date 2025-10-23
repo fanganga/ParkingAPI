@@ -2,7 +2,7 @@
 {
     public class EntryRequest
     {
-        public String VehicleReg { get; set; }
+        public string VehicleReg { get; set; }
         public int VehicleType { get; set; }
     }
 }

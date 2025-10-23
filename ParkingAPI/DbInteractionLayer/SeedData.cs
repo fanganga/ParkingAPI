@@ -17,7 +17,7 @@ namespace ParkingAPI.DbInteractionLayer
                 int numberOfSpaces = 50;
                 if (context.Spaces.FirstOrDefault() == null)
                 {
-                    for (int i = 1; i <= 50; i++)
+                    for (int i = 1; i <= numberOfSpaces; i++)
                     {
                         context.Spaces.Add(new ParkingSpace { Id = i });
                     }

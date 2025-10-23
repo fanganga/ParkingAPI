@@ -35,5 +35,11 @@ namespace ParkingAPI.Repos
 
             _context.SaveChanges();
         }
+
+        public SpaceOccupancy? GetCurrentOccupancyForReg(string reg)
+        {
+            return _context.Spaces.Where(space => space.OccupierReg ==  reg)
+                .Select(s => new SpaceOccupancy() { OccupierReg = reg, OccupierSize = (CarSize) s.OccupierType, TimeIn = s.OccupierTimeIn} ).FirstOrDefault();
+        }
     }
 }

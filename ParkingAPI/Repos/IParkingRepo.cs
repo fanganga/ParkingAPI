@@ -11,5 +11,7 @@ namespace ParkingAPI.Repos
         public int? GetFirstFreeSpace();
 
         public void RecordCarEntry(CarEntered entry);
+
+        public SpaceOccupancy? GetCurrentOccupancyForReg(string reg);
     }
 }
