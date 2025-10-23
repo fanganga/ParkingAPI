@@ -1,6 +1,8 @@
 # Parking API readme
 
 ## Setup Instructions
+Compile and run the application either through Visual Studio or dotnet CLI.
+The API is available on https://localhost:7295
 
 ## Assumptions & Questions
 
@@ -8,7 +10,7 @@
 
 ### Basic requirements
 
-- [] Get /parking returns valid JSON
+- [x] Get /parking returns valid JSON
 - [] Get /parking returns data from DB
 - [] Post /parking updates DB, putting specified vehicle in first avaiable space
 - [] Post /parking returns {VehicleReg: string, SpaceNumber: int, TimeIn: DateTime}
