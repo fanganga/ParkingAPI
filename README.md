@@ -16,24 +16,27 @@ The API is available on https://localhost:7295
 
 - [x] Get /parking returns valid JSON
 - [x] Get /parking returns data from DB
-- [] Post /parking updates DB, putting specified vehicle in first avaiable space
-- [] Post /parking returns {VehicleReg: string, SpaceNumber: int, TimeIn: DateTime}
-- [] Post /parking returns error for invalid type, reg already recorded
-- [] Post /parking/exit updates DB
-- [] Post /parking/exit returns error if reg does not represent parked vehicle
-- [] Post /parking/exit returns {VehicleReg: string, VehicleCharge: double TimeIn: DateTime, TimeOut: DateTime}
+- [x] Post /parking updates DB, putting specified vehicle in first avaiable space
+- [ ] Post /parking returns {VehicleReg: string, SpaceNumber: int, TimeIn: DateTime}
+- [ ] Post /parking returns error for invalid type, reg already recorded
+- [ ] Post /parking/exit updates DB
+- [ ] Post /parking/exit returns error if reg does not represent parked vehicle
+- [ ] Post /parking/exit returns {VehicleReg: string, VehicleCharge: double TimeIn: DateTime, TimeOut: DateTime}
 
 ### Stretch goals
 
-- [] Integrate swagger
-- [] Replace in-memory DB with MSSQL
-- [] Make number of spaces configurable
+- [ ] Integrate swagger
+- [ ] Replace in-memory DB with MSSQL
+- [ ] Make number of spaces configurable
 
 ### Possible scope increases for future
 
 If a historical record is required in the database, that can be achieved by separating the single table into:
 - A table, ParkingSpaces with column Int: Id
-- A table, ParkingOccupancies with columns Int: SpaceId, String: OccupierReg, DateTime: OccupierIn, DateTime: OccupierOut
+- A table, ParkingOccupancies with columns Int: SpaceId, String: OccupierReg, DateTime: OccupierIn, DateTime?: OccupierOut
 - A table, Cars with columns String: Reg and Int: Type - this avoids duplication of car type data in the ParkingOccupancies table, moving to a higher normal form
 
 It may be necessary to account for the relationship between registration number and car type changing - eg when someone transfers a personalised number plate to a new car of a different size - by introducing a car ID separate from the registration number
+
+Occupied spaces can be represented by those ParkingOccupancies where OccupierOut is null
+Free spaces can be represented by obtaining a Left join of the parking spaces table and the occupied spaces selection, then selecting those records from the join result where OccupierReg has no value.
