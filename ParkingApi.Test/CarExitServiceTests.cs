@@ -14,7 +14,8 @@ namespace ParkingApi.Test
     public class CarExitServiceTests
     {
         private DateTime testTime;
-        private double testFee = 3.50;
+        private int testFeePence = 350;
+        private double testFeePounds = 3.50;
         private int testSpace = 2;
         private string testReg = "ABC 123";
         private DateTime entryTime;
@@ -42,7 +43,7 @@ namespace ParkingApi.Test
             mockTimeProvider.Setup(t => t.CurrentTime()).Returns(testTime);
             var mockRepo = new Mock<IParkingRepo>();
             var mockCalculator = new Mock<IFeeCalculator>();
-            mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFee);
+            mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFeePence);
 
             CarExitService service = new CarExitService(mockTimeProvider.Object, mockCalculator.Object, mockRepo.Object);
 
@@ -58,7 +59,7 @@ namespace ParkingApi.Test
             mockTimeProvider.Setup(t => t.CurrentTime()).Returns(testTime);
             var mockRepo = new Mock<IParkingRepo>();
             var mockCalculator = new Mock<IFeeCalculator>();
-            mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFee);
+            mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFeePence);
 
             CarExitService service = new CarExitService(mockTimeProvider.Object, mockCalculator.Object, mockRepo.Object);
 
@@ -75,7 +76,7 @@ namespace ParkingApi.Test
             mockTimeProvider.Setup(t => t.CurrentTime()).Returns(testTime);
             var mockRepo = new Mock<IParkingRepo>();
             var mockCalculator = new Mock<IFeeCalculator>();
-            mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFee);
+            mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFeePence);
 
             CarExitService service = new CarExitService(mockTimeProvider.Object, mockCalculator.Object, mockRepo.Object);
 
@@ -84,7 +85,7 @@ namespace ParkingApi.Test
             Assert.Multiple(() =>
             {
                 Assert.That(response.VehicleReg, Is.EqualTo(testReg));
-                Assert.That(response.VehicleCharge, Is.EqualTo(testFee));
+                Assert.That(response.VehicleCharge, Is.EqualTo(testFeePounds));
                 Assert.That(response.TimeIn, Is.EqualTo(entryTime));
                 Assert.That(response.TimeOut, Is.EqualTo(testTime));
             });

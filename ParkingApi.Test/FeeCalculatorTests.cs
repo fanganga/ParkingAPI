@@ -24,7 +24,7 @@ namespace ParkingApi.Test
                
             };
 
-            Assert.That(_calculator.CalculateFee(under1Small), Is.EqualTo(0.0));
+            Assert.That(_calculator.CalculateFee(under1Small), Is.EqualTo(0));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(0.1));
+            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(10));
 
             SpaceOccupancy med = new()
             {
@@ -50,7 +50,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(0.2));
+            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(20));
 
             SpaceOccupancy large = new()
             {
@@ -60,7 +60,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(0.4));
+            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(40));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(0.1 * 4));
+            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(10 * 4));
 
             SpaceOccupancy med = new()
             {
@@ -86,7 +86,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(0.2 *4));
+            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(20 * 4));
 
             SpaceOccupancy large = new()
             {
@@ -96,7 +96,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(0.4 * 4));
+            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(40 * 4));
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(0.1 * 5 + 1));
+            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(10 * 5 + 100));
 
             SpaceOccupancy med = new()
             {
@@ -122,7 +122,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(0.2 * 5 + 1));
+            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(20 * 5 + 100));
 
             SpaceOccupancy large = new()
             {
@@ -132,7 +132,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(0.4 * 5 +1));
+            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(40 * 5 + 100));
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(0.1 * 9 + 1));
+            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(10 * 9 + 100));
 
             SpaceOccupancy med = new()
             {
@@ -158,7 +158,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(0.2 * 9 + 1));
+            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(20 * 9 + 100));
 
             SpaceOccupancy large = new()
             {
@@ -168,7 +168,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(0.4 * 9 + 1));
+            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(40 * 9 + 100));
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(0.1 * 10 + 2));
+            Assert.That(_calculator.CalculateFee(small), Is.EqualTo(10 * 10 + 200));
 
             SpaceOccupancy med = new()
             {
@@ -194,7 +194,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(0.2 * 10 + 2));
+            Assert.That(_calculator.CalculateFee(med), Is.EqualTo(20 * 10 + 200));
 
             SpaceOccupancy large = new()
             {
@@ -204,7 +204,7 @@ namespace ParkingApi.Test
 
             };
 
-            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(0.4 * 10 + 2));
+            Assert.That(_calculator.CalculateFee(large), Is.EqualTo(40 * 10 + 200));
         }
     }
 }

@@ -21,11 +21,13 @@ namespace ParkingAPI.Services
         {
             occupancy.TimeOut = _timeProvider.CurrentTime();
             _repo.FreeSpace(occupancy.SpaceNumber);
+            int internalFeePence = _feeCalculator.CalculateFee(occupancy);
+            double apiFeePence = Convert.ToDouble(internalFeePence);
 
             return new ExitResponse()
             {
                 VehicleReg = occupancy.OccupierReg,
-                VehicleCharge = _feeCalculator.CalculateFee(occupancy),
+                VehicleCharge = apiFeePence / 100,
                 TimeIn = occupancy.TimeIn,
                 TimeOut = occupancy.TimeOut
             };

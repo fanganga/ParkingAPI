@@ -4,30 +4,30 @@ namespace ParkingAPI.Services
 {
     public class FeeCalculator : IFeeCalculator
     {
-        private readonly Dictionary<CarSize, double> _sizeRates;
+        private readonly Dictionary<CarSize, int> _sizeRatesPence;
         private readonly int _longStayIntervalMin;
-        private readonly double _longStayIntervalFee;
+        private readonly int _longStayIntervalFeePence;
 
         public FeeCalculator()
         {
-            _sizeRates = new Dictionary<CarSize, double>
+            _sizeRatesPence = new Dictionary<CarSize, int>
             {
-                { CarSize.Small, 0.1 },
-                { CarSize.Medium, 0.2 },
-                { CarSize.Large, 0.4 }
+                { CarSize.Small, 10 },
+                { CarSize.Medium, 20 },
+                { CarSize.Large, 40 }
             };
 
-            _longStayIntervalFee = 1.00;
+            _longStayIntervalFeePence = 100;
             _longStayIntervalMin = 5;
         }
-        public double CalculateFee(SpaceOccupancy occupancyPeriod)
+        public int CalculateFee(SpaceOccupancy occupancyPeriod)
         {
             TimeSpan timeInSpace = occupancyPeriod.TimeOut.Value - occupancyPeriod.TimeIn.Value;
             int minutes = (int) Math.Floor(timeInSpace.TotalMinutes);
-            double fee = minutes * _sizeRates[occupancyPeriod.OccupierSize];
+            int fee = minutes * _sizeRatesPence[occupancyPeriod.OccupierSize];
 
             int longStayIntervals = minutes / _longStayIntervalMin;
-            fee += longStayIntervals * _longStayIntervalFee;
+            fee += longStayIntervals * _longStayIntervalFeePence;
             return fee;
         }
     }
