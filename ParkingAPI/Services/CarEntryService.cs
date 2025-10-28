@@ -29,8 +29,7 @@ namespace ParkingAPI.Services
             {
                 VehicleReg = request.VehicleReg,
                 SpaceNumber = entry.SpaceNumber,
-                TimeIn = entry.TimeIn,
-
+                TimeIn = entry.TimeIn
             };
         }
     }

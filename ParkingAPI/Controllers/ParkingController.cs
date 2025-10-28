@@ -35,45 +35,59 @@ namespace ParkingAPI.Controllers
         [Route("parking")]
         public ActionResult<EntryResponse> Enter(EntryRequest request)
         {
-            ModelStateDictionary validationResult = request.Validate();
-            if(validationResult.ErrorCount > 0)
+            try
+            { 
+                ModelStateDictionary validationResult = request.Validate();
+                if(validationResult.ErrorCount > 0)
+                {
+                    return BadRequest(validationResult);
+                }
+
+                if(_repo.GetCurrentOccupancyForReg(request.VehicleReg) != null)
+                {
+                    return BadRequest("Attempting to record arrival of vehicle registration already in car park");
+                }
+
+                int? firstFreeSpace = _repo.GetFirstFreeSpace();
+
+                if (firstFreeSpace == null)
+                {
+                    return Problem("No free spaces");
+                } else {
+                    EntryResponse response = _carEntryService.ParkCar(request, firstFreeSpace.Value);
+                    return new ActionResult<EntryResponse>(response);
+                }
+            } catch (Exception e)
             {
-                return BadRequest(validationResult);
+                _logger.LogError(e,e.Message);
+                return Problem("Internal error");
             }
-
-            if(_repo.GetCurrentOccupancyForReg(request.VehicleReg) != null)
-            {
-                return BadRequest("Attempting to record arrival of vehicle registration already in car park");
-            }
-
-            int? firstFreeSpace = _repo.GetFirstFreeSpace();
-
-            if (firstFreeSpace == null)
-            {
-                return Problem("No free spaces");
-            } else {
-                EntryResponse response = _carEntryService.ParkCar(request, firstFreeSpace.Value);
-                return new ActionResult<EntryResponse>(response);
-            }            
         }
 
         [HttpPost]
         [Route("parking/exit")]
         public ActionResult<ExitResponse> Exit(ExitRequest request)
         {
-            if (String.IsNullOrEmpty(request.VehicleReg))
-            {
-                return BadRequest("Must supply VehicleReg");
-            }
-            SpaceOccupancy? currentOccupancy = _repo.GetCurrentOccupancyForReg(request.VehicleReg);
 
-            if(currentOccupancy == null)
+            try
             {
-                return BadRequest("No vehicle with the supplied registration is recorded in the car park");
-            }
+                if (String.IsNullOrEmpty(request.VehicleReg))
+                {
+                    return BadRequest("Must supply VehicleReg");
+                }
+                SpaceOccupancy? currentOccupancy = _repo.GetCurrentOccupancyForReg(request.VehicleReg);
 
-            ExitResponse response = _carExitService.CheckOutCar(currentOccupancy);
-            return new ActionResult<ExitResponse>(response);
+                if(currentOccupancy == null)
+                {
+                    return BadRequest("No vehicle with the supplied registration is recorded in the car park");
+                }
+
+                ExitResponse response = _carExitService.CheckOutCar(currentOccupancy);
+                return new ActionResult<ExitResponse>(response);
+            } catch (Exception e) {
+                _logger.LogError(e, e.Message);
+                return Problem("Internal error");
+            }
         }
     }
 }

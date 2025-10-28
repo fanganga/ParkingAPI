@@ -42,7 +42,7 @@
 - [x] Fix duplicate method name
 - [ ] Fix use of doubles throughout
 - [ ] Fix direct calls of repo from controller
-- [ ] Exception handling
+- [x] Exception handling
 - [ ] Defined architectural pattern
 
 
