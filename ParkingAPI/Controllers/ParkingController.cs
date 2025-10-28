@@ -33,7 +33,7 @@ namespace ParkingAPI.Controllers
 
         [HttpPost]
         [Route("parking")]
-        public ActionResult<EntryResponse> Index(EntryRequest request)
+        public ActionResult<EntryResponse> Enter(EntryRequest request)
         {
             ModelStateDictionary validationResult = request.Validate();
             if(validationResult.ErrorCount > 0)

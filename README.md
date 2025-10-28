@@ -37,6 +37,14 @@
 - [x] Make number of spaces configurable
 - [ ] Replace in-memory DB with MSSQL
 
+### Corrections
+
+- [x] Fix duplicate method name
+- [ ] Fix use of doubles throughout
+- [ ] Fix direct calls of repo from controller
+- [ ] Exception handling
+- [ ] Defined architectural pattern
+
 
 ### Possible scope increases for future
 
