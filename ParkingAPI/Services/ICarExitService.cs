@@ -1,5 +1,4 @@
-﻿using ParkingAPI.Models.APIModels;
-using ParkingAPI.Models.InternalModels;
+﻿using ParkingAPI.Models.InternalModels;
 
 namespace ParkingAPI.Services
 {

@@ -15,6 +15,7 @@ builder.Services.AddDbContext<ParkingDataContext>(opt => opt
 builder.Services.AddScoped<IParkingRepo, ParkingRepo>();
 builder.Services.AddSingleton<IFeeCalculator, FeeCalculator>();
 builder.Services.AddSingleton<ITimeProvider, ParkingTimeProvider>();
+builder.Services.AddScoped<ICarParkStatisticsService, CarParkStatisticsService>();
 builder.Services.AddScoped<ICarExitService, CarExitService>();
 builder.Services.AddScoped<ICarEntryService, CarEntryService>();
 builder.Services.AddControllers();

@@ -41,7 +41,7 @@
 
 - [x] Fix duplicate method name
 - [x] Fix use of doubles throughout
-- [ ] Fix direct calls of repo from controller
+- [x] Fix direct calls of repo from controller
 - [x] Exception handling
 - [ ] Defined architectural pattern
 

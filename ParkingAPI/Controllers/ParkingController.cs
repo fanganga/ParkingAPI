@@ -2,9 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ParkingAPI.Models.APIModels;
 using ParkingAPI.Models.InternalModels;
-using ParkingAPI.Repos;
 using ParkingAPI.Services;
-using System.Text.Json.Serialization;
 
 namespace ParkingAPI.Controllers
 {
@@ -12,14 +10,14 @@ namespace ParkingAPI.Controllers
     public class ParkingController : ControllerBase
     {
         private readonly ILogger<ParkingController> _logger;
-        private readonly IParkingRepo _repo;
         private readonly ICarExitService _carExitService;
         private readonly ICarEntryService _carEntryService;
+        private readonly ICarParkStatisticsService _carParkStatisticsService;
 
-        public ParkingController(ILogger<ParkingController> logger, IParkingRepo repo, ICarExitService carExitService, ICarEntryService carEntryService)
+        public ParkingController(ILogger<ParkingController> logger, ICarParkStatisticsService carParkStatisticsService, ICarExitService carExitService, ICarEntryService carEntryService)
         {
             _logger = logger;
-            _repo = repo;
+            _carParkStatisticsService = carParkStatisticsService;
             _carExitService = carExitService;
             _carEntryService = carEntryService;
         }
@@ -28,7 +26,8 @@ namespace ParkingAPI.Controllers
         [Route("parking")]
         public ParkingStatus Index()
         {
-            return new ParkingStatus() { AvailableSpaces = _repo.CountFreeSpaces(), OccupiedSpaces = _repo.CountOccupiedSpaces() };
+            CarParkOccupancy occupancyCounts = _carParkStatisticsService.CountSpaces();
+            return new ParkingStatus() { AvailableSpaces = occupancyCounts.FreeSpaces, OccupiedSpaces = occupancyCounts.OccupiedSpaces };
         }
 
         [HttpPost]
