@@ -1,9 +1,16 @@
 ﻿using ParkingAPI.Models.APIModels;
+using ParkingAPI.Models.InternalModels;
 
 namespace ParkingAPI.Services
 {
+    public enum EntryStatus
+    {
+        Success,
+        RegAlreadyParked,
+        NoSpace
+    }
     public interface ICarEntryService
     {
-        public EntryResponse ParkCar(EntryRequest request, int spaceNumber);
+        public Result<CarEntered,EntryStatus> ParkCar(string registrationNumber, CarSize size);
     }
 }

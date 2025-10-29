@@ -1,4 +1,6 @@
-﻿namespace ParkingAPI.Models.APIModels
+﻿using ParkingAPI.Models.InternalModels;
+
+namespace ParkingAPI.Models.APIModels
 {
     public record EntryResponse
     {

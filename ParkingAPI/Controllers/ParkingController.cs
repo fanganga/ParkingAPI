@@ -43,20 +43,23 @@ namespace ParkingAPI.Controllers
                     return BadRequest(validationResult);
                 }
 
-                if(_repo.GetCurrentOccupancyForReg(request.VehicleReg) != null)
-                {
-                    return BadRequest("Attempting to record arrival of vehicle registration already in car park");
+                Result<CarEntered, EntryStatus> entryResult = _carEntryService.ParkCar(request.VehicleReg, (CarSize) request.VehicleType);
+
+                switch (entryResult.Status) {
+                    case EntryStatus.Success :
+                        {
+                            return new EntryResponse()
+                            {
+                                SpaceNumber = entryResult.Value.SpaceNumber,
+                                VehicleReg = entryResult.Value.RegistrationNumber,
+                                TimeIn = entryResult.Value.TimeIn
+                            };
+                        }
+                    case EntryStatus.RegAlreadyParked : return BadRequest("Attempting to record arrival of vehicle registration already in car park");
+                    case EntryStatus.NoSpace: return Problem("No free spaces");
+                    default: return Problem("Internal error. Unexpected return status");
                 }
 
-                int? firstFreeSpace = _repo.GetFirstFreeSpace();
-
-                if (firstFreeSpace == null)
-                {
-                    return Problem("No free spaces");
-                } else {
-                    EntryResponse response = _carEntryService.ParkCar(request, firstFreeSpace.Value);
-                    return new ActionResult<EntryResponse>(response);
-                }
             } catch (Exception e)
             {
                 _logger.LogError(e,e.Message);

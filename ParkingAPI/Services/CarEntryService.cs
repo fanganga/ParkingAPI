@@ -4,6 +4,7 @@ using ParkingAPI.Repos;
 
 namespace ParkingAPI.Services
 {
+
     public class CarEntryService : ICarEntryService
     {
         private readonly ITimeProvider _timeProvider;
@@ -14,23 +15,28 @@ namespace ParkingAPI.Services
             _timeProvider = timeProvider;
             _repo = repo;
         }
-        public EntryResponse ParkCar(EntryRequest request, int spaceNumber)
+        public Result<CarEntered, EntryStatus> ParkCar(string registrationNumber, CarSize size)
         {
+            if (_repo.GetCurrentOccupancyForReg(registrationNumber) != null)
+            {
+                return new Result<CarEntered, EntryStatus>(null, EntryStatus.RegAlreadyParked);
+            }
+
+            int? firstFreeSpace = _repo.GetFirstFreeSpace();
+            if (firstFreeSpace == null) {
+                return new Result<CarEntered, EntryStatus>(null, EntryStatus.NoSpace);
+            }
+
             CarEntered entry = new()
             {
                 TimeIn = _timeProvider.CurrentTime(),
-                CarSize = (CarSize)request.VehicleType,
-                RegistrationNumber = request.VehicleReg,
-                SpaceNumber = spaceNumber
+                CarSize = size,
+                RegistrationNumber = registrationNumber,
+                SpaceNumber = firstFreeSpace.Value
             };
             _repo.RecordCarEntry(entry);
 
-            return new()
-            {
-                VehicleReg = request.VehicleReg,
-                SpaceNumber = entry.SpaceNumber,
-                TimeIn = entry.TimeIn
-            };
+            return new Result<CarEntered, EntryStatus>(entry, EntryStatus.Success);
         }
     }
 }
