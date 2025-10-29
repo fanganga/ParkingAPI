@@ -15,7 +15,6 @@ namespace ParkingApi.Test
     {
         private DateTime testTime;
         private int testFeePence = 350;
-        private double testFeePounds = 3.50;
         private int testSpace = 2;
         private string testReg = "ABC 123";
         private DateTime entryTime;
@@ -44,11 +43,13 @@ namespace ParkingApi.Test
             var mockRepo = new Mock<IParkingRepo>();
             var mockCalculator = new Mock<IFeeCalculator>();
             mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFeePence);
+            mockRepo.Setup(r => r.GetCurrentOccupancyForReg(testReg)).Returns(testOccupancy);
 
             CarExitService service = new CarExitService(mockTimeProvider.Object, mockCalculator.Object, mockRepo.Object);
 
-            service.CheckOutCar(testOccupancy);
+            service.CheckOutCar(testReg);
 
+            mockRepo.Verify(r => r.GetCurrentOccupancyForReg(testReg));
             mockRepo.Verify(r => r.FreeSpace(testSpace));
         }
 
@@ -60,34 +61,37 @@ namespace ParkingApi.Test
             var mockRepo = new Mock<IParkingRepo>();
             var mockCalculator = new Mock<IFeeCalculator>();
             mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFeePence);
+            mockRepo.Setup(r => r.GetCurrentOccupancyForReg(testReg)).Returns(testOccupancy);
 
             CarExitService service = new CarExitService(mockTimeProvider.Object, mockCalculator.Object, mockRepo.Object);
 
-            service.CheckOutCar(testOccupancy);
+            service.CheckOutCar(testReg);
 
             mockCalculator.Verify(c => c.CalculateFee(It.Is<SpaceOccupancy>(o =>
              o.OccupierSize == testSize && o.TimeIn == entryTime && o.TimeOut == testTime)));
         }
 
         [Test]
-        public void ShouldBuildTheAppropriateResponse()
+        public void ShouldBuildTheAppropriateReturnValue()
         {
             var mockTimeProvider = new Mock<ITimeProvider>();
             mockTimeProvider.Setup(t => t.CurrentTime()).Returns(testTime);
             var mockRepo = new Mock<IParkingRepo>();
             var mockCalculator = new Mock<IFeeCalculator>();
             mockCalculator.Setup(c => c.CalculateFee(It.IsAny<SpaceOccupancy>())).Returns(testFeePence);
+            mockRepo.Setup(r => r.GetCurrentOccupancyForReg(testReg)).Returns(testOccupancy);
 
             CarExitService service = new CarExitService(mockTimeProvider.Object, mockCalculator.Object, mockRepo.Object);
 
-            ExitResponse response = service.CheckOutCar(testOccupancy);
+            Result<OccupancyBill, ExitStatus> returnValue = service.CheckOutCar(testReg);
 
             Assert.Multiple(() =>
             {
-                Assert.That(response.VehicleReg, Is.EqualTo(testReg));
-                Assert.That(response.VehicleCharge, Is.EqualTo(testFeePounds));
-                Assert.That(response.TimeIn, Is.EqualTo(entryTime));
-                Assert.That(response.TimeOut, Is.EqualTo(testTime));
+                Assert.That(returnValue.Status, Is.EqualTo(ExitStatus.Success));
+                Assert.That(returnValue.Value.RegistrationNumber, Is.EqualTo(testReg));
+                Assert.That(returnValue.Value.FeePence, Is.EqualTo(testFeePence));
+                Assert.That(returnValue.Value.TimeIn, Is.EqualTo(entryTime));
+                Assert.That(returnValue.Value.TimeOut, Is.EqualTo(testTime));
             });
 
         }

@@ -78,15 +78,28 @@ namespace ParkingAPI.Controllers
                 {
                     return BadRequest("Must supply VehicleReg");
                 }
-                SpaceOccupancy? currentOccupancy = _repo.GetCurrentOccupancyForReg(request.VehicleReg);
 
-                if(currentOccupancy == null)
+                Result<OccupancyBill, ExitStatus> exitResult = _carExitService.CheckOutCar(request.VehicleReg);
+                switch (exitResult.Status)
                 {
-                    return BadRequest("No vehicle with the supplied registration is recorded in the car park");
+                    case ExitStatus.Success:
+                        {
+                            double apiFeePence = exitResult.Value.FeePence;
+                            return new ExitResponse()
+                            {
+                                VehicleReg = exitResult.Value.RegistrationNumber,
+                                TimeIn = exitResult.Value.TimeIn,
+                                TimeOut = exitResult.Value.TimeOut,
+                                VehicleCharge = apiFeePence / 100
+                            };
+                        }
+                    case ExitStatus.RegNotFound:
+                        {
+                            return BadRequest("No vehicle with the supplied registration is recorded in the car park");
+                        }
+                    default:
+                        return Problem("Internal error. Unexpected return status");
                 }
-
-                ExitResponse response = _carExitService.CheckOutCar(currentOccupancy);
-                return new ActionResult<ExitResponse>(response);
             } catch (Exception e) {
                 _logger.LogError(e, e.Message);
                 return Problem("Internal error");

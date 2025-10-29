@@ -17,20 +17,28 @@ namespace ParkingAPI.Services
             _repo = repo;
         }
 
-        public ExitResponse CheckOutCar(SpaceOccupancy occupancy)
+        public Result<OccupancyBill?, ExitStatus> CheckOutCar(string registrationNumber)
         {
-            occupancy.TimeOut = _timeProvider.CurrentTime();
-            _repo.FreeSpace(occupancy.SpaceNumber);
-            int internalFeePence = _feeCalculator.CalculateFee(occupancy);
-            double apiFeePence = Convert.ToDouble(internalFeePence);
+            SpaceOccupancy? currentOccupancy = _repo.GetCurrentOccupancyForReg(registrationNumber);
 
-            return new ExitResponse()
+            if (currentOccupancy == null)
             {
-                VehicleReg = occupancy.OccupierReg,
-                VehicleCharge = apiFeePence / 100,
-                TimeIn = occupancy.TimeIn,
-                TimeOut = occupancy.TimeOut
-            };
+                return new Result<OccupancyBill?, ExitStatus>( null, ExitStatus.RegNotFound );
+            }
+
+            currentOccupancy.TimeOut = _timeProvider.CurrentTime();
+            _repo.FreeSpace(currentOccupancy.SpaceNumber);
+            int internalFeePence = _feeCalculator.CalculateFee(currentOccupancy);
+
+            return new Result<OccupancyBill?, ExitStatus>(
+                new OccupancyBill(
+                    registrationNumber,
+                    currentOccupancy.TimeIn.Value,
+                    currentOccupancy.TimeOut.Value,
+                    internalFeePence
+                ),
+                ExitStatus.Success
+            );
         }
     }
 }
